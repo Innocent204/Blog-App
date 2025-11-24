@@ -1,0 +1,133 @@
+/* PostEditor specific styles to ensure text visibility */
+.post-editor .ProseMirror {
+  color: #000000 !important; /* Black text */
+  background-color: transparent !important;
+}
+
+/* Light theme (default) */
+:root {
+  --editor-text: #000000; /* Black */
+  --editor-bg: #f9fafb; /* gray-50 */
+  --editor-border: #e5e7eb; /* gray-200 */
+  --editor-placeholder: #6b7280; /* gray-500 */
+  --editor-selection: #dbeafe; /* blue-100 */
+}
+
+/* Dark theme */
+.dark .post-editor .ProseMirror,
+.dark .post-editor .ProseMirror p,
+.dark .post-editor .ProseMirror h1,
+.dark .post-editor .ProserMirror h2,
+.dark .post-editor .ProseMirror h3,
+.dark .post-editor .ProseMirror h4,
+.dark .post-editor .ProseMirror h5,
+.dark .post-editor .ProseMirror h6 {
+  --editor-text: #000000; /* Black */
+  --editor-bg: #ffffff; /* White background in dark mode */
+  --editor-border: #e5e7eb; /* gray-200 */
+  --editor-placeholder: #6b7280; /* gray-500 */
+  --editor-selection: #dbeafe; /* blue-100 */
+  color: var(--editor-text) !important;
+  background-color: var(--editor-bg) !important;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.post-editor .ProseMirror,
+.post-editor .ProseMirror p,
+.post-editor .ProseMirror h1,
+.post-editor .ProseMirror h2,
+.post-editor .ProseMirror h3,
+.post-editor .ProseMirror h4,
+.post-editor .ProseMirror h5,
+.post-editor .ProseMirror h6,
+.post-editor .ProseMirror strong,
+.post-editor .ProseMirror em,
+.post-editor .ProseMirror code,
+.post-editor .ProseMirror pre,
+.post-editor .ProseMirror blockquote,
+.post-editor .ProseMirror li,
+.post-editor .ProseMirror ul,
+.post-editor .ProseMirror ol {
+  color: var(--editor-text) !important;
+  background-color: transparent !important;
+}
+
+.post-editor .ProseMirror a {
+  color: var(--primary) !important;
+}
+
+.post-editor .ProseMirror hr {
+  border-color: var(--editor-border) !important;
+}
+
+.post-editor .ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Placeholder text */
+.post-editor .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280; /* gray-500 */
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 1 !important;
+}
+
+/* Ensure all text is black */
+.post-editor .ProseMirror,
+.post-editor .ProseMirror p,
+.post-editor .ProseMirror h1,
+.post-editor .ProseMirror h2,
+.post-editor .ProseMirror h3,
+.post-editor .ProseMirror h4,
+.post-editor .ProseMirror h5,
+.post-editor .ProseMirror h6 {
+  color: #000000 !important;
+}
+
+/* Override any prose styling that might be interfering */
+.post-editor .ProseMirror.prose,
+.post-editor .ProseMirror .prose,
+.post-editor.prose .ProseMirror {
+  color: var(--editor-text) !important;
+  background-color: transparent !important;
+}
+
+/* Selection color */
+.post-editor .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-placeholder);
+}
+
+/* Fix code block styling */
+.post-editor .ProseMirror pre {
+  background-color: var(--editor-bg) !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid var(--editor-border) !important;
+  margin: 0.5rem 0 !important;
+}
+
+/* Fix blockquote styling */
+.post-editor .ProseMirror blockquote {
+  border-left: 4px solid var(--primary) !important;
+  padding-left: 1rem !important;
+  margin: 0.5rem 0 !important;
+  color: var(--editor-text) !important;
+  font-style: italic;
+}
+
+/* Fix list styling */
+.post-editor .ProseMirror ul,
+.post-editor .ProseMirror ol {
+  padding-left: 1.5rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+/* Fix heading styling */
+.post-editor .ProseMirror h1 { font-size: 2em !important; font-weight: 700 !important; margin: 0.67em 0 !important; }
+.post-editor .ProseMirror h2 { font-size: 1.5em !important; font-weight: 600 !important; margin: 0.83em 0 !important; }
+.post-editor .ProseMirror h3 { font-size: 1.17em !important; font-weight: 600 !important; margin: 1em 0 !important; }
