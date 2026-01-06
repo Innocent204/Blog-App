@@ -5,7 +5,7 @@ import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Settings, User, Palette, Bell, Lock, Save } from 'lucide-react';
+import { Settings, User, Palette, Lock, Save } from 'lucide-react';
 
 interface SettingsPanelProps {
   userRole: 'admin' | 'editor';
@@ -103,7 +103,7 @@ export function SettingsPanel({ userRole, onSave }: SettingsPanelProps) {
               </div>
               <Select 
                 value={settings.preferences.theme} 
-                onValueChange={(value) => handleChange('preferences', 'theme', value)}
+                onValueChange={(value: any) => handleChange('preferences', 'theme', value)}
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select theme" />
@@ -122,7 +122,7 @@ export function SettingsPanel({ userRole, onSave }: SettingsPanelProps) {
               </div>
               <Switch
                 checked={settings.preferences.notifications}
-                onCheckedChange={(checked) => handleChange('preferences', 'notifications', checked)}
+                onCheckedChange={(checked: any) => handleChange('preferences', 'notifications', checked)}
               />
             </div>
             <div className="flex items-center justify-between">
@@ -132,7 +132,7 @@ export function SettingsPanel({ userRole, onSave }: SettingsPanelProps) {
               </div>
               <Switch
                 checked={settings.preferences.emailNotifications}
-                onCheckedChange={(checked) => handleChange('preferences', 'emailNotifications', checked)}
+                onCheckedChange={(checked: any) => handleChange('preferences', 'emailNotifications', checked)}
               />
             </div>
           </CardContent>
@@ -185,7 +185,7 @@ export function SettingsPanel({ userRole, onSave }: SettingsPanelProps) {
                 </div>
                 <Switch
                   checked={settings.blogSettings.allowComments}
-                  onCheckedChange={(checked) => handleChange('blogSettings', 'allowComments', checked)}
+                  onCheckedChange={(checked: any) => handleChange('blogSettings', 'allowComments', checked)}
                 />
               </div>
             </CardContent>

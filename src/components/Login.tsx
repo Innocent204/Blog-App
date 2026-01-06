@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../contexts/SupabaseAuthContext';
-import { supabase } from '../lib/supabase';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { toast } from 'sonner';
-import { Sparkles, Lock, Mail, PenTool, FileText } from 'lucide-react';
+import { Lock, Mail, PenTool, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Login() {
@@ -27,26 +26,6 @@ export function Login() {
       console.error('Login error:', error);
       const errorMessage = error.message || 'Login failed. Please check your credentials.';
       toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Google OAuth login
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-      
-      if (error) throw error;
-    } catch (error: any) {
-      console.error('Google login error:', error);
-      toast.error(error.message || 'Failed to sign in with Google');
     } finally {
       setIsLoading(false);
     }

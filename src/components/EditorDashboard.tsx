@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -103,11 +103,16 @@ export function EditorDashboard() {
 
   const handleSavePost = (postData: Partial<Post>) => {
     if (postData.id) {
-      setPosts(posts.map((p) => (p.id === postData.id ? { ...p, ...postData } as Post : p)));
+      // Explicitly cast the ID to number to ensure type safety
+      const updatedPost = { 
+        ...postData, 
+        id: Number(postData.id) 
+      };
+      setPosts(posts.map((p) => (p.id === updatedPost.id ? { ...p, ...updatedPost } as Post : p)));
       toast.success('Post updated successfully');
     } else {
       const newPost: Post = {
-        id: Math.max(...posts.map((p) => p.id)) + 1,
+        id: Math.max(0, ...posts.map((p) => p.id)) + 1,
         title: postData.title || '',
         excerpt: postData.excerpt || '',
         content: postData.content || '',

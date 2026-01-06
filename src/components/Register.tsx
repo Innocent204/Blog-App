@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../contexts/SupabaseAuthContext';
-import { supabase } from '../lib/supabase';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { toast } from 'sonner';
-import { Sparkles, User, Mail, Lock, ArrowLeft, Shield, PenTool, FileText } from 'lucide-react';
+import { User, Mail, Lock, ArrowLeft, Shield, PenTool, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Register() {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/SupabaseAuthContext';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider as SupabaseAuthProvider, useAuth } from './contexts/SupabaseAuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LandingPage } from './components/LandingPage';
 import { Login } from './components/Login';
@@ -24,16 +24,38 @@ const AppContent = () => {
   const { user, isLoading } = useAuth();
   const location = useLocation();
 
+  console.log('AppContent rendered', { 
+    user, 
+    isLoading, 
+    pathname: location.pathname,
+    state: location.state 
+  });
+
   if (isLoading) {
+    console.log('AppContent: Loading...');
     return <LoadingSpinner />;
   }
+  
+  console.log('AppContent: Not loading, user:', user ? 'authenticated' : 'not authenticated');
 
   return (
     <Routes>
       {/* Public routes - only accessible when NOT authenticated */}
       <Route 
         path="/" 
-        element={!user ? <LandingPage onGetStarted={() => {}} /> : <Navigate to="/dashboard" replace />} 
+        element={
+          !user ? (
+            <>
+              {console.log('Rendering LandingPage')}
+              <LandingPage onGetStarted={() => {}} />
+            </>
+          ) : (
+            <>
+              {console.log('Redirecting to /dashboard')}
+              <Navigate to="/dashboard" replace />
+            </>
+          )
+        } 
       />
       <Route 
         path="/login" 
@@ -73,14 +95,14 @@ const AppContent = () => {
 const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <AuthProvider>
+      <SupabaseAuthProvider>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <Router>
-            <AppContent />
-          </Router>
+          <AppContent />
           <Toaster position="top-center" />
         </ThemeProvider>
-      </AuthProvider>
+      </SupabaseAuthProvider>
     </div>
   );
 };
+
+export default App;

@@ -19,6 +19,8 @@ export interface Post {
   category_id: number;
   category?: Category;
   status: 'draft' | 'published';
+  featuredImage?: string;
+  tags?: string[];
   created_at: string;
   updated_at: string;
   author?: User;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/SupabaseAuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -131,8 +131,9 @@ export function Dashboard() {
   };
 
   const handleSavePost = (postData: Partial<Post>) => {
-    if (postData.id) {
-      setPosts(posts.map((p) => (p.id === postData.id ? { ...p, ...postData } as Post : p)));
+    if (postData.id !== undefined) {
+      const postId = Number(postData.id);
+      setPosts(posts.map((p) => (p.id === postId ? { ...p, ...postData, id: postId } as Post : p)));
       toast.success('Post updated successfully');
     } else {
       const newPost: Post = {

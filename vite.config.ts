@@ -4,7 +4,7 @@
   import path from 'path';
 
   export default defineConfig({
-    plugins: [react()],
+    plugins: [react()] as any,
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -48,7 +48,12 @@
         '@radix-ui/react-accordion@1.2.3': '@radix-ui/react-accordion',
         '@jsr/supabase__supabase-js@2.49.8': '@jsr/supabase__supabase-js',
         '@': path.resolve(__dirname, './src'),
+        // Ensure all packages resolve to the single React copy in this project
+        react: path.resolve(__dirname, 'node_modules/react'),
+        'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
       },
+      // Dedupe React so prebundled deps don't bring their own copy at runtime
+      dedupe: ['react', 'react-dom'],
     },
     build: {
       target: 'esnext',

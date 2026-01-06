@@ -1,90 +1,80 @@
-import React, { useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import React, { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import './PostEditor.css';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
-import { 
-  Bold, 
-  Italic, 
-  List, 
-  ListOrdered, 
-  Heading2, 
-  Undo, 
-  Redo,
-  Quote,
-  Code,
-  Sparkles,
-  ArrowLeft,
-  PenTool,
-  FileText
-} from 'lucide-react';
+import { ArrowLeft, PenTool, FileText, Bold, Italic, Heading2, List, ListOrdered, Quote, Code, Undo, Redo } from 'lucide-react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { Post, Category } from '../types';
 
 interface PostEditorProps {
   post?: Post | null;
-  categories: Category[];
+  categories?: Category[];
   onSave: (post: Partial<Post>) => void;
   onCancel: () => void;
 }
 
-export function PostEditor({ post, categories, onSave, onCancel }: PostEditorProps) {
-  const [title, setTitle] = React.useState(post?.title || '');
-  const [excerpt, setExcerpt] = React.useState(post?.excerpt || '');
-  const [categoryId, setCategoryId] = React.useState(post?.category_id?.toString() || '');
-  const [status, setStatus] = React.useState<'draft' | 'published'>(post?.status || 'draft');
-
-  const { theme } = useTheme();
+export function PostEditor({ post, categories = [], onSave, onCancel }: PostEditorProps) {
+  const [title, setTitle] = useState(post?.title || '');
+  const [excerpt, setExcerpt] = useState(post?.excerpt || '');
+  const [content, setContent] = useState(post?.content || '');
+  const [categoryId, setCategoryId] = useState(post?.category_id || '');
+  const [status, setStatus] = useState<'draft' | 'published'>(post?.status === 'published' ? 'published' : 'draft');
+  const [featuredImage] = useState(post?.featuredImage || '');
+  const [tags] = useState(post?.tags?.join(', ') || '');
+  const [, setIsSaving] = useState(false);
+  useTheme();
 
   const editor = useEditor({
     extensions: [StarterKit],
-    content: post?.content || '<p>Start writing your post...</p>',
-    editorProps: {
-      attributes: {
-        class: 'prose dark:prose-invert max-w-none focus:outline-none min-h-[400px] p-6 text-base',
-        'data-theme': theme,
-      },
+    content: content,
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
     },
   });
 
-  // Update editor theme when theme changes
-  useEffect(() => {
-    if (editor) {
-      editor.setOptions({
-        editorProps: {
-          attributes: {
-            class: `prose dark:prose-invert max-w-none focus:outline-none min-h-[400px] p-6 text-base ${theme === 'dark' ? 'dark' : ''}`,
-            'data-theme': theme,
-          },
-        },
-      });
-    }
-  }, [theme, editor]);
 
-  useEffect(() => {
-    if (post && editor) {
-      editor.commands.setContent(post.content);
-    }
-  }, [post, editor]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
 
-  const handleSave = () => {
-    if (!editor) return;
-
+    // Create a new object with all required fields
     const postData: Partial<Post> = {
-      id: post?.id,
-      title,
-      excerpt,
-      content: editor.getHTML(),
-      category_id: parseInt(categoryId),
-      status,
+      title: title,
+      excerpt: excerpt,
+      content: content,
+      status: status as 'draft' | 'published',
     };
 
-    onSave(postData);
+    // Only add category_id if it's a valid number
+    const parsedCategoryId = categoryId ? parseInt(String(categoryId), 10) : undefined;
+    if (parsedCategoryId !== undefined && !isNaN(parsedCategoryId)) {
+      postData.category_id = parsedCategoryId;
+    }
+
+    // Add optional fields only if they have values
+    if (featuredImage) {
+      postData.featuredImage = featuredImage;
+    }
+
+    if (tags) {
+      postData.tags = tags.split(',').map(tag => tag.trim()).filter(Boolean);
+    }
+
+    // Add id if it exists
+    if (post?.id !== undefined) {
+      postData.id = Number(post.id);
+    }
+
+    try {
+      await onSave(postData);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!editor) {
@@ -290,7 +280,7 @@ export function PostEditor({ post, categories, onSave, onCancel }: PostEditorPro
           Cancel
         </Button>
         <Button 
-          onClick={handleSave}
+          onClick={handleSubmit}
           className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
         >
           {post ? 'Update Post' : 'Create Post'}

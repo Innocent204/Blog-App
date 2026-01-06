@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { FileText, Edit, BarChart3 } from 'lucide-react';

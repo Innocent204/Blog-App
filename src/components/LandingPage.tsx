@@ -16,8 +16,6 @@ import {
   Check,
   ArrowRight,
   Globe,
-  TrendingUp,
-  Lock,
   PenTool,
   FileText,
 } from 'lucide-react';
@@ -31,7 +29,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
   const { theme, toggleTheme } = useTheme();
   
   const handleGetStarted = () => {
-    navigate('/login');
+    navigate('/register');
   };
   
   const handleSignIn = () => {
